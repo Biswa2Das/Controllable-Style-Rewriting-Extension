@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Text Tools</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      width: 500px;
+      min-height: 600px;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+      padding: 0;
+    }
+
+    .container {
+      background: #0f1419;
+      padding: 20px;
+      height: 100%;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 20px;
+      padding-bottom: 15px;
+      border-bottom: 2px solid #667eea;
+    }
+
+    h1 {
+      color: #667eea;
+      font-size: 24px;
+      font-weight: 600;
+      margin-bottom: 5px;
+    }
+
+    .subtitle {
+      color: #a0a0a0;
+      font-size: 12px;
+    }
+
+    .section {
+      margin-bottom: 20px;
+    }
+
+    .section-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: #e0e0e0;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+    }
+
+    .section-title::before {
+      content: '';
+      width: 4px;
+      height: 16px;
+      background: #667eea;
+      margin-right: 8px;
+      border-radius: 2px;
+    }
+
+    textarea {
+      width: 100%;
+      padding: 12px;
+      border: 2px solid #2a2a3e;
+      border-radius: 8px;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      font-size: 14px;
+      resize: vertical;
+      transition: border-color 0.3s;
+      line-height: 1.5;
+      background-color: #1a1a2e;
+      color: #e0e0e0;
+    }
+
+    textarea:focus {
+      outline: none;
+      border-color: #667eea;
+    }
+
+    #inputText {
+      min-height: 120px;
+    }
+
+    #outputText {
+      min-height: 150px;
+      background-color: #16213e;
+    }
+
+    .options-group {
+      margin-bottom: 15px;
+    }
+
+    .options-label {
+      font-size: 13px;
+      color: #b0b0b0;
+      margin-bottom: 8px;
+      display: block;
+      font-weight: 500;
+    }
+
+    select {
+      width: 100%;
+      padding: 10px;
+      border: 2px solid #2a2a3e;
+      border-radius: 6px;
+      font-size: 14px;
+      background-color: #1a1a2e;
+      color: #e0e0e0;
+      cursor: pointer;
+      transition: border-color 0.3s;
+    }
+
+    select:focus {
+      outline: none;
+      border-color: #667eea;
+    }
+
+    .button-group {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 10px;
+      margin-bottom: 15px;
+    }
+
+    button {
+      padding: 12px 20px;
+      border: none;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+    }
+
+    button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.4);
+    }
+
+    button:active {
+      transform: translateY(0);
+    }
+
+    button:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    #humaniseBtn {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+    }
+
+    #copyBtn {
+      grid-column: 1 / -1;
+      background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    #copyBtn::before {
+      content: '📋';
+    }
+
+    .status {
+      padding: 10px;
+      border-radius: 6px;
+      font-size: 13px;
+      text-align: center;
+      margin-top: 10px;
+      transition: all 0.3s;
+      min-height: 20px;
+    }
+
+    .status.success {
+      background-color: #1e4620;
+      color: #90ee90;
+      border: 1px solid #2d6a2f;
+    }
+
+    .status.error {
+      background-color: #4a1a1a;
+      color: #ff6b6b;
+      border: 1px solid #6a2a2a;
+    }
+
+    .status.working {
+      background-color: #4a4a1a;
+      color: #ffeb3b;
+      border: 1px solid #6a6a2a;
+    }
+
+    .collapsible {
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .collapsible::after {
+      content: ' ▼';
+      font-size: 10px;
+      transition: transform 0.3s;
+    }
+
+    .collapsible.collapsed::after {
+      transform: rotate(-90deg);
+    }
+
+    .collapsible-content {
+      max-height: 500px;
+      overflow: hidden;
+      transition: max-height 0.3s ease;
+    }
+
+    .collapsible-content.hidden {
+      max-height: 0;
+    }
+
+    .info-box {
+      background: #1a2332;
+      border-left: 4px solid #667eea;
+      padding: 12px;
+      border-radius: 4px;
+      font-size: 12px;
+      color: #b0b0b0;
+      margin-top: 10px;
+    }
+
+    .output-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    .char-count {
+      font-size: 11px;
+      color: #888;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Humanize AI</h1>
+      <div class="subtitle">Humanize text with AI</div>
+    </header>
+
+    <!-- Input Section -->
+    <div class="section">
+      <label class="section-title" for="inputText">Input Text</label>
+      <textarea id="inputText" placeholder="Paste your text here..."></textarea>
+      <div style="position: relative; text-align: right; margin-top: 6px;">
+        <button id="clearInputBtn" style="padding: 4px 10px; font-size: 12px; background-color: #1e1e2f; color: #a0a0a0; border: 1px solid #333; border-radius: 5px; cursor: pointer;">Clear</button>
+      </div>
+      <div class="char-count">
+        <span id="inputCharCount">0 characters</span>
+      </div>
+    </div>
+
+    <!-- Humanize Options -->
+    <div class="section">
+      <label class="section-title collapsible" id="humanizeOptionsToggle">
+        Humanize Options
+      </label>
+      <div class="collapsible-content" id="humanizeOptions">
+        <div class="options-group">
+          <label class="options-label" for="perspectiveSelect">Writing Perspective:</label>
+          <select id="perspectiveSelect">
+            <option value="maintain">Maintain Original</option>
+            <option value="first-person">First-Person (I, we)</option>
+            <option value="second-person">Second-Person (you)</option>
+            <option value="third-person">Third-Person (he, she, they)</option>
+          </select>
+        </div>
+
+        <div class="options-group">
+          <label class="options-label" for="toneSelect">Writing Tone:</label>
+          <select id="toneSelect">
+            <option value="natural">Natural & Conversational</option>
+            <option value="professional">Professional</option>
+            <option value="casual">Casual & Friendly</option>
+            <option value="formal">Formal</option>
+            <option value="storytelling">Narrative/Storytelling</option>
+            <option value="persuasive">Persuasive</option>
+            <option value="academic">Academic</option>
+          </select>
+        </div>
+
+        <div class="options-group">
+          <label class="options-label" for="styleSelect">Writing Style:</label>
+          <select id="styleSelect">
+            <option value="clear">Clear & Simple</option>
+            <option value="descriptive">Descriptive & Detailed</option>
+            <option value="concise">Concise & Direct</option>
+            <option value="elaborate">Elaborate & Expressive</option>
+            <option value="emotional">Emotional & Personal</option>
+          </select>
+        </div>
+
+        <div class="info-box">
+          💡 Tip: Select options to customize how the AI rewrites your text to sound more human and engaging.
+        </div>
+      </div>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="button-group">
+      <button id="humaniseBtn">Humanize</button>
+    </div>
+
+    <!-- Output Section -->
+    <div class="section">
+      <div class="output-header">
+        <label class="section-title" for="outputText">Output Text</label>
+        <span class="char-count" id="outputCharCount">0 characters</span>
+      </div>
+      <textarea id="outputText" placeholder="Processed text will appear here..." readonly></textarea>
+    </div>
+
+    <!-- Copy and Clear Button -->
+    <div class="action-buttons" style="display: flex; justify-content: space-between; margin-top: 15px;">
+      <button id="copyBtn" class="main-btn" style="flex: 1; margin-right: 8px;">Copy</button>
+      <button id="clearAllBtn" class="main-btn" style="flex: 1; background-color: #4b4b70;">Clear All</button>
+    </div>
+
+    <!-- Status -->
+    <div id="status" class="status"></div>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>
